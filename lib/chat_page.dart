@@ -19,7 +19,7 @@ class _ChatPageState extends State<ChatPage> {
   getChatHistory() async {
     var data = await FirebaseStorage('${FirebaseAuth.instance.currentUser?.uid}').getChatData();
     if (data != null) {
-      chatHistory.addAll(data['UserRequests']);
+      chatHistory.addAll(data['ChatHistory']);
       print(chatHistory);
     }
   }
@@ -71,14 +71,17 @@ class _ChatPageState extends State<ChatPage> {
               decoration: InputDecoration(
                   suffixIcon: GestureDetector(
                       onTap: () async {
+                        chatHistory.clear();
                         var data =
                             await FirebaseStorage('${FirebaseAuth.instance.currentUser?.uid}').getChatData();
-                        if (data != null) {
-                          chatHistory.addAll(data['Chat']);
-                          chatHistory
-                              .add('${FirebaseAuth.instance.currentUser?.uid}-$message-${widget.messageTo}');
-                          FirebaseStorage('${FirebaseAuth.instance.currentUser?.uid}')
-                              .uploadAndUpdateChat(chatHistory);
+
+                         if (data != null) {
+                           chatHistory.addAll(data['ChatHistory']);
+                           chatHistory
+                               .add('${FirebaseAuth.instance.currentUser?.uid}-$message-${widget.messageTo}');
+                           FirebaseStorage('${FirebaseAuth.instance.currentUser?.uid}')
+                               .uploadAndUpdateChat(chatHistory);
+
                         } else {
                           chatHistory
                               .add('${FirebaseAuth.instance.currentUser?.uid}-$message-${widget.messageTo}');
@@ -89,7 +92,7 @@ class _ChatPageState extends State<ChatPage> {
                             await FirebaseStorage('${FirebaseAuth.instance.currentUser?.uid}').getChatData();
                         if (chatData != null) {
                           setState(() {
-                            chatHistory.addAll(data['Chat']);
+                            chatHistory.addAll(data['ChatHistory']);
                           });
                         }
                       },

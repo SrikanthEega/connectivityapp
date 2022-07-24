@@ -67,11 +67,14 @@ class FirebaseStorage {
     return requestData;
   }
   Future<dynamic> getChatData() async {
+    print('Hello Narayana');
     var requestData;
     await FirebaseFirestore.instance.collection("Chat").get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
+        print('Hello Narayana');
         if (uid == result.id) {
           requestData = result.data();
+          print(requestData);
         }
       });
     });
